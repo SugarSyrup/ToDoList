@@ -7,7 +7,6 @@ function ToDoList() {
     const onValid = ( data: any ) => {
         console.log(data);
     };
-    console.log(formState.errors);
     return (
         <div>
             <form onSubmit={handleSubmit(onValid)}>
