@@ -8,8 +8,9 @@ function ToDo({ text, category, id }: IToDo) {
     
     setToDos((oldToDos) => {
       const targetIndex = oldToDos.findIndex((toDo) => toDo.id === id);
-      const newToDo = { text, id, category:name };
-      return oldToDos;
+      //@TODO: cataegory 타입 중복 ( 따로 분리하기 ) 
+      const newToDo = { text, id, category:name as "TO_DO" | "DOING" | "DONE"};
+      return [...oldToDos.slice(0, targetIndex), newToDo, ...oldToDos.slice(targetIndex+1)];
     });
   }
 
