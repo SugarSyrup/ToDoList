@@ -1,5 +1,7 @@
 import { useRecoilState, useRecoilValue } from "recoil";
-import { Categories, categoryState, seperatedToDoSelector, toDoSelector } from "../atoms";
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+
+import { Categories, categoryState, seperatedToDoSelector } from "../atoms";
 import CreateToDo from "./CreateToDo";
 import ToDo from "./ToDo";
 
@@ -10,6 +12,9 @@ function ToDoList() {
   const onInput = (event:React.FormEvent<HTMLSelectElement>) => {
     const { currentTarget : {value}} = event;
     setCategory(value as Categories);
+  }
+  const onDragEnd = () => {
+
   }
   return (
     <div>
@@ -22,23 +27,25 @@ function ToDoList() {
       </select>
       <CreateToDo />
       {/* {todos?.map(toDo => <ToDo key={toDo.id} {...toDo}/>)} */}
-      <div>
+      <DragDropContext onDragEnd={onDragEnd}>
         <div>
-        {
-          todos?.map((todo) => <ToDo key={todo.id} {...todo}/>)
-        }
+          <Droppable droppableId="first">
+            {(provided) => (
+              <ul ref={provided.innerRef} {...provided.droppableProps}>
+              {
+                todos?.map((todo) => {
+                  return (
+                    <Draggable key={todo.id} draggableId={JSON.stringify(todo.id)} index={parseInt(todo.text)}>
+                      {(provided) => (<li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}><ToDo key={todo.id} {...todo}/></li>)}
+                    </Draggable>
+                  )
+                })
+              }
+              </ul>
+            )}
+          </Droppable>
         </div>
-        <div>
-        {
-          doings?.map((todo) => <ToDo key={todo.id} {...todo}/>)
-        }
-        </div>
-        <div>
-        {
-          dones?.map((todo) => <ToDo key={todo.id} {...todo}/>)
-        }
-        </div>
-      </div>
+      </DragDropContext>
     </div>
   )
 }
