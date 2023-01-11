@@ -35,3 +35,10 @@ export const toDoSelector = selector({
     return toDos.filter((toDo) => toDo.category === category);
   }
 })
+export const seperatedToDoSelector = selector({
+  key: "seperatedToDoSelector",
+  get: ({get}) => {
+    const todos = get(toDoState);
+    return [todos.filter((toDo:IToDo) => toDo.category === Categories.TO_DO),todos.filter((toDo:IToDo) => toDo.category === Categories.DOING),todos.filter((toDo:IToDo) => toDo.category === Categories.DONE)];
+  }
+})
